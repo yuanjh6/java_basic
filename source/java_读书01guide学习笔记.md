@@ -1,7 +1,7 @@
 # java_读书01guide学习笔记
-原文：[Java基础知识.md](https://gitee.com/SnailClimb/JavaGuide/blob/master/docs/java/basis/Java基础知识.md)
-
 V1.1-JavaGuide面试突击版
+
+原文：[Java基础知识.md](https://gitee.com/SnailClimb/JavaGuide/blob/master/docs/java/basis/Java基础知识.md)
 
 ## Java基础
 ### 1.1.4. Java 和 C++的区别?
