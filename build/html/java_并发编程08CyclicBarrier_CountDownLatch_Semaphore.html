@@ -1,0 +1,483 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>java_并发编程08CyclicBarrier_CountDownLatch_Semaphore &mdash; java基础 v1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="java_并发编程09ThreadLocal" href="java_并发编程09ThreadLocal.html" />
+    <link rel="prev" title="java_并发编程07锁相关小结" href="java_并发编程07锁相关小结.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> java基础
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="java_读书01guide学习笔记.html">java_读书01guide学习笔记</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_读书02java核心面试知识整理.html">java_读书02java核心面试知识整理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_读书03Java基础高频面试题(2021年最新版).html">java_读书03Java基础高频面试题(2021年最新版)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_读书05殷建卫架构笔记之java.html">java_读书05殷建卫架构笔记之java</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础01常见坑.html">java_基础01常见坑</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础02集合.html">java_基础02集合</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础03双亲委派.html">java_基础03双亲委派</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础04内存结构和gc垃圾回收.html">java_基础04内存结构和gc垃圾回收</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程01JMM内存模型.html">java_并发编程01JMM内存模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程02Volatile.html">java_并发编程02Volatile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程03Atomic原子类和CAS.html">java_并发编程03Atomic原子类和CAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程04Synchronized.html">java_并发编程04Synchronized</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程05从锁到ReentrantLock.html">java_并发编程05从锁到ReentrantLock</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程06从ReentrantLock到AQS.html">java_并发编程06从ReentrantLock到AQS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程07锁相关小结.html">java_并发编程07锁相关小结</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">java_并发编程08CyclicBarrier_CountDownLatch_Semaphore</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#countdownlatch">一.闭锁CountDownLatch</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">场景</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">基础</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">应用举例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cyclicbarrier">二.栅栏CyclicBarrier</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">场景</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">基础</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">应用举例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#semaphore">三.信号量Semaphore</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">场景</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">基础</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">四.总结</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">参考</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程09ThreadLocal.html">java_并发编程09ThreadLocal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程10阻塞队列.html">java_并发编程10阻塞队列</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程11线程池.html">java_并发编程11线程池</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring01读书要点.html">java_spring01读书要点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring02ioc有什么优点.html">java_spring02ioc有什么优点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring03依赖注入与自动装配区别.html">java_spring03依赖注入与自动装配区别</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring04Autowired与Resource差异解析.html">java_spring04Autowired与Resource差异解析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring05循环依赖.html">java_spring05循环依赖</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_mybatis学习要点.html">java_mybatis学习要点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_微服务01学习笔记.html">java_微服务01学习笔记</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">java基础</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>java_并发编程08CyclicBarrier_CountDownLatch_Semaphore</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/java_并发编程08CyclicBarrier_CountDownLatch_Semaphore.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="java-08cyclicbarrier-countdownlatch-semaphore">
+<h1>java_并发编程08CyclicBarrier_CountDownLatch_Semaphore<a class="headerlink" href="#java-08cyclicbarrier-countdownlatch-semaphore" title="Permalink to this headline">¶</a></h1>
+<p>JUC 中的同步器三个主要的成员：CountDownLatch、CyclicBarrier 和Semaphore。这三个是 JUC 中较为常用的同步器，通过它们可以方便地实现很多线程之间协作的功能。</p>
+<div class="section" id="countdownlatch">
+<h2>一.闭锁CountDownLatch<a class="headerlink" href="#countdownlatch" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>场景<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>1）、运动会中赛跑项目，之后所有的赛跑运动员准备好了，此时裁判才能宣布该赛跑项目正式开始，裁判才能打出发信枪；当参与此次赛跑项目的所有的运动员都跑完了，此次赛跑项目才能算结束，才能统计出比赛名次。</p>
+<p>。。。。等等</p>
+<p>就是所有的准备好了，才能开始；或者是所有的都结束了，才能算结束。</p>
+</div>
+<div class="section" id="id2">
+<h3>基础<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>CountDownLatch类位于java.util.concurrent包下，利用它可以实现类似计数器的功能。比如有一个任务A，它要等待其他4个任务执行完毕之后才能执行，此时就可以利用CountDownLatch来实现这种功能了。</p>
+<p>CountDownLatch类只提供了一个构造器：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">CountDownLatch</span><span class="p">(</span><span class="nb">int</span> <span class="n">count</span><span class="p">){</span>  <span class="p">};</span><span class="o">//</span><span class="n">参数count为计数值</span>
+</pre></div>
+</div>
+<p>然后下面这3个方法是CountDownLatch类中最重要的方法：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public void await() thows InterruptedException{     };   //调用await()方法的线程会被挂起，它会等待直到count为0时才继续执行
+public boolean await( long timeout,TimeUnit unit) throws InterruptedException{    };   //和await()类似，只不过等待一定的时间后count值还没变为0的话就会继续执行
+public void countDown(){   };  //将count值-1
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>应用举例<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>CountDownLatch的用法</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">Test</span> <span class="p">{</span>
+     <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>   
+         <span class="n">final</span> <span class="n">CountDownLatch</span> <span class="n">latch</span> <span class="o">=</span> <span class="n">new</span> <span class="n">CountDownLatch</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+          
+         <span class="n">new</span> <span class="n">Thread</span><span class="p">(){</span>
+             <span class="n">public</span> <span class="n">void</span> <span class="n">run</span><span class="p">()</span> <span class="p">{</span>
+                 <span class="k">try</span> <span class="p">{</span>
+                     <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;子线程&quot;</span><span class="o">+</span><span class="n">Thread</span><span class="o">.</span><span class="n">currentThread</span><span class="p">()</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;正在执行&quot;</span><span class="p">);</span>
+                    <span class="n">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
+                    <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;子线程&quot;</span><span class="o">+</span><span class="n">Thread</span><span class="o">.</span><span class="n">currentThread</span><span class="p">()</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;执行完毕&quot;</span><span class="p">);</span>
+                    <span class="n">latch</span><span class="o">.</span><span class="n">countDown</span><span class="p">();</span>
+                <span class="p">}</span> <span class="n">catch</span> <span class="p">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">e</span><span class="o">.</span><span class="n">printStackTrace</span><span class="p">();</span>
+                <span class="p">}</span>
+             <span class="p">};</span>
+         <span class="p">}</span><span class="o">.</span><span class="n">start</span><span class="p">();</span>
+          
+         <span class="n">new</span> <span class="n">Thread</span><span class="p">(){</span>
+             <span class="n">public</span> <span class="n">void</span> <span class="n">run</span><span class="p">()</span> <span class="p">{</span>
+                 <span class="k">try</span> <span class="p">{</span>
+                     <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;子线程&quot;</span><span class="o">+</span><span class="n">Thread</span><span class="o">.</span><span class="n">currentThread</span><span class="p">()</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;正在执行&quot;</span><span class="p">);</span>
+                     <span class="n">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
+                     <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;子线程&quot;</span><span class="o">+</span><span class="n">Thread</span><span class="o">.</span><span class="n">currentThread</span><span class="p">()</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;执行完毕&quot;</span><span class="p">);</span>
+                     <span class="n">latch</span><span class="o">.</span><span class="n">countDown</span><span class="p">();</span>
+                <span class="p">}</span> <span class="n">catch</span> <span class="p">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">e</span><span class="o">.</span><span class="n">printStackTrace</span><span class="p">();</span>
+                <span class="p">}</span>
+             <span class="p">};</span>
+         <span class="p">}</span><span class="o">.</span><span class="n">start</span><span class="p">();</span>
+          
+         <span class="k">try</span> <span class="p">{</span>
+             <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;等待2个子线程执行完毕...&quot;</span><span class="p">);</span>
+            <span class="n">latch</span><span class="o">.</span><span class="k">await</span><span class="p">();</span>
+            <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;2个子线程已经执行完毕&quot;</span><span class="p">);</span>
+            <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;继续执行主线程&quot;</span><span class="p">);</span>
+        <span class="p">}</span> <span class="n">catch</span> <span class="p">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="n">printStackTrace</span><span class="p">();</span>
+        <span class="p">}</span>
+     <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>执行结果：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">线程Thread</span><span class="o">-</span><span class="mi">0</span><span class="n">正在执行</span>
+<span class="n">线程Thread</span><span class="o">-</span><span class="mi">1</span><span class="n">正在执行</span>
+<span class="n">等待2个子线程执行完毕</span><span class="o">...</span>
+<span class="n">线程Thread</span><span class="o">-</span><span class="mi">0</span><span class="n">执行完毕</span>
+<span class="n">线程Thread</span><span class="o">-</span><span class="mi">1</span><span class="n">执行完毕</span>
+<span class="mi">2</span><span class="n">个子线程已经执行完毕</span>
+<span class="n">继续执行主线程</span> 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="cyclicbarrier">
+<h2>二.栅栏CyclicBarrier<a class="headerlink" href="#cyclicbarrier" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h3>场景<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>适合的业务场景，比如</p>
+<p>1）、，现有一大任务，需要得到全年的统计数据的，这个工作量是巨大的，那么可以将其分割为12个月的子任务，各个子任务相互独立，当所有子任务完成了，则就可以进行全年统计了，这样大大提升了统计效率。</p>
+<p>2）、大家一起去郊游，由于大家住的地方比较分散，故需要一个集合点之后一起出发，这样大家才能玩得开心嘛。</p>
+<p>就是当有一个大任务时，需要分配多个子任务去执行，只有当所有的子任务都执行完成后，才能执行主任务。</p>
+</div>
+<div class="section" id="id5">
+<h3>基础<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>回环栅栏，通过它可以实现让一组线程等待至某个状态之后再全部同时执行。叫做回环是因为当所有等待线程都被释放以后，CyclicBarrier可以被重用。我们暂且把这个状态就叫做barrier，当调用await()方法之后，线程就处于barrier了。　　
+CyclicBarrier类位于java.util.concurrent包下，CyclicBarrier提供2个构造器：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">CyclicBarrier</span><span class="p">(</span><span class="nb">int</span> <span class="n">parties</span><span class="p">,</span> <span class="n">Runnable</span> <span class="n">barrierAction</span><span class="p">){</span>    <span class="p">}</span>
+<span class="n">public</span> <span class="n">CyclicBarrier</span><span class="p">(</span><span class="nb">int</span> <span class="n">parties</span><span class="p">){</span>     <span class="p">}</span>
+</pre></div>
+</div>
+<p>参数parties指让多少个线程或者任务等待至barrier状态；参数barrierAction为当这些线程都达到barrier状态时会执行的内容。</p>
+<p>然后CyclicBarrier中最重要的方法就是await方法，它有2个重载版本：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="nb">int</span> <span class="k">await</span><span class="p">()</span> <span class="n">throws</span> <span class="n">InterruptedException</span><span class="p">,</span> <span class="n">BrokenBarrierException</span> <span class="p">{</span> <span class="p">};</span>
+<span class="n">public</span> <span class="nb">int</span> <span class="k">await</span><span class="p">(</span><span class="n">long</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">TimeUnit</span> <span class="n">unit</span><span class="p">)</span><span class="n">throws</span> <span class="n">InterruptedException</span><span class="p">,</span><span class="n">BrokenBarrierException</span><span class="p">,</span><span class="n">TimeoutException</span> <span class="p">{</span> <span class="p">};</span>
+</pre></div>
+</div>
+<p>第一个版本比较常用，用来挂起当前线程，直至所有线程都到达barrier状态再同时执行后续任务；</p>
+<p>第二个版本是让这些线程等待至一定的时间，如果还有线程没有到达barrier状态就直接让到达barrier的线程执行后续任务。</p>
+</div>
+<div class="section" id="id6">
+<h3>应用举例<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>假若有若干个线程都要进行写数据操作，并且只有所有线程都完成写数据操作之后，这些线程才能继续做后面的事情，此时就可以利用CyclicBarrier了：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">Test</span> <span class="p">{</span>
+    <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nb">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+        <span class="n">CyclicBarrier</span> <span class="n">barrier</span>  <span class="o">=</span> <span class="n">new</span> <span class="n">CyclicBarrier</span><span class="p">(</span><span class="n">N</span><span class="p">);</span>
+        <span class="k">for</span><span class="p">(</span><span class="nb">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">new</span> <span class="n">Writer</span><span class="p">(</span><span class="n">barrier</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="n">static</span> <span class="k">class</span> <span class="nc">Writer</span> <span class="n">extends</span> <span class="n">Thread</span><span class="p">{</span>
+        <span class="n">private</span> <span class="n">CyclicBarrier</span> <span class="n">cyclicBarrier</span><span class="p">;</span>
+        <span class="n">public</span> <span class="n">Writer</span><span class="p">(</span><span class="n">CyclicBarrier</span> <span class="n">cyclicBarrier</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">this</span><span class="o">.</span><span class="n">cyclicBarrier</span> <span class="o">=</span> <span class="n">cyclicBarrier</span><span class="p">;</span>
+        <span class="p">}</span>
+ 
+        <span class="nd">@Override</span>
+        <span class="n">public</span> <span class="n">void</span> <span class="n">run</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;线程&quot;</span><span class="o">+</span><span class="n">Thread</span><span class="o">.</span><span class="n">currentThread</span><span class="p">()</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;正在写入数据...&quot;</span><span class="p">);</span>
+            <span class="k">try</span> <span class="p">{</span>
+                <span class="n">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5000</span><span class="p">);</span>      <span class="o">//</span><span class="n">以睡眠来模拟写入数据操作</span>
+                <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;线程&quot;</span><span class="o">+</span><span class="n">Thread</span><span class="o">.</span><span class="n">currentThread</span><span class="p">()</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;写入数据完毕，等待其他线程写入完毕&quot;</span><span class="p">);</span>
+                <span class="n">cyclicBarrier</span><span class="o">.</span><span class="k">await</span><span class="p">();</span>
+            <span class="p">}</span> <span class="n">catch</span> <span class="p">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">e</span><span class="o">.</span><span class="n">printStackTrace</span><span class="p">();</span>
+            <span class="p">}</span><span class="n">catch</span><span class="p">(</span><span class="n">BrokenBarrierException</span> <span class="n">e</span><span class="p">){</span>
+                <span class="n">e</span><span class="o">.</span><span class="n">printStackTrace</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;所有线程写入完毕，继续处理其他任务...&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>执行结果：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>线程Thread-0正在写入数据...
+线程Thread-3正在写入数据...
+线程Thread-2正在写入数据...
+线程Thread-1正在写入数据...
+线程Thread-2写入数据完毕，等待其他线程写入完毕
+线程Thread-0写入数据完毕，等待其他线程写入完毕
+线程Thread-3写入数据完毕，等待其他线程写入完毕
+线程Thread-1写入数据完毕，等待其他线程写入完毕
+所有线程写入完毕，继续处理其他任务...
+所有线程写入完毕，继续处理其他任务...
+所有线程写入完毕，继续处理其他任务...
+所有线程写入完毕，继续处理其他任务...
+</pre></div>
+</div>
+<p>从上面输出结果可以看出，每个写入线程执行完写数据操作之后，就在等待其他线程写入操作完毕。</p>
+<p>当所有线程线程写入操作完毕之后，所有线程就继续进行后续的操作了。</p>
+<p>如果说想在所有线程写入操作完之后，进行额外的其他操作可以为<strong>CyclicBarrier提供Runnable参数</strong>：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="n">CyclicBarrier</span> <span class="n">barrier</span>  <span class="o">=</span> <span class="n">new</span> <span class="n">CyclicBarrier</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">new</span> <span class="n">Runnable</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nd">@Override</span>
+    <span class="n">public</span> <span class="n">void</span> <span class="n">run</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;当前线程&quot;</span><span class="o">+</span><span class="n">Thread</span><span class="o">.</span><span class="n">currentThread</span><span class="p">()</span><span class="o">.</span><span class="n">getName</span><span class="p">());</span>   
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>当四个线程都到达barrier状态后，会由最后一个线程去执行Runnable。</p>
+<p>另外CyclicBarrier是可以重用的,而CountDownLatch无法进行重复使用。</p>
+</div>
+</div>
+<div class="section" id="semaphore">
+<h2>三.信号量Semaphore<a class="headerlink" href="#semaphore" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id7">
+<h3>场景<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p>适合的业务场景，比如
+1）、当有10个人去上茅厕，但是只有5个坑，即只能同时5个人使用，只有当一个人不使用坑了，另一个人才能使用该空闲的坑，一直维持着只能同时5个人使用。</p>
+<p>2）、当停车场来了100辆车时，但是只有30个停车位，即只能同时提供30个车辆停放，只有当一辆车开走了，另一辆车才能进入该空闲的停车位，一直维持着只能同时提供30个停车位。</p>
+<p>就是同时只能提供有限的，走一个才能进一个。</p>
+</div>
+<div class="section" id="id8">
+<h3>基础<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p>Semaphore可以控同时访问的线程个数，通过 acquire() 获取一个许可，如果没有就等待，而 release() 释放一个许可。</p>
+<p>Semaphore类位于java.util.concurrent包下，它提供了2个构造器：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public Semaphore(int permits) {          //参数permits表示许可数目，即同时可以允许多少线程进行访问
+    sync = new NonfairSync(permits);
+}
+public Semaphore(int permits, boolean fair) {    //这个多了一个参数fair表示是否是公平的，即等待时间越久的越先获取许可
+    sync = (fair)? new FairSync(permits) : new NonfairSync(permits);
+}
+</pre></div>
+</div>
+<p>下面说一下Semaphore类中比较重要的几个方法，首先是acquire()、release()方法：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">void</span> <span class="n">acquire</span><span class="p">()</span> <span class="n">throws</span> <span class="n">InterruptedException</span> <span class="p">{</span>  <span class="p">}</span>     <span class="o">//</span><span class="n">获取一个许可</span>
+<span class="n">public</span> <span class="n">void</span> <span class="n">acquire</span><span class="p">(</span><span class="nb">int</span> <span class="n">permits</span><span class="p">)</span> <span class="n">throws</span> <span class="n">InterruptedException</span> <span class="p">{</span> <span class="p">}</span>    <span class="o">//</span><span class="n">获取permits个许可</span>
+<span class="n">public</span> <span class="n">void</span> <span class="n">release</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>          <span class="o">//</span><span class="n">释放一个许可</span>
+<span class="n">public</span> <span class="n">void</span> <span class="n">release</span><span class="p">(</span><span class="nb">int</span> <span class="n">permits</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>    <span class="o">//</span><span class="n">释放permits个许可</span>
+</pre></div>
+</div>
+<p>acquire()用来获取一个许可，若无许可能够获得，则会一直等待，直到获得许可。</p>
+<p>release()用来释放许可。注意，在释放许可之前，必须先获获得许可。</p>
+<p>这4个方法都会被阻塞，如果想立即得到执行结果，可以使用下面几个方法：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public boolean tryAcquire() { };    //尝试获取一个许可，若获取成功，则立即返回true，若获取失败，则立即返回false
+public boolean tryAcquire(long timeout, TimeUnit unit) throws InterruptedException { };  //尝试获取一个许可，若在指定的时间内获取成功，则立即返回true，否则则立即返回false
+public boolean tryAcquire(int permits) { }; //尝试获取permits个许可，若获取成功，则立即返回true，若获取失败，则立即返回false
+public boolean tryAcquire(int permits, long timeout, TimeUnit unit) throws InterruptedException { }; //尝试获取permits个许可，若在指定的时间内获取成功，则立即返回true，否则则立即返回false
+</pre></div>
+</div>
+<p>另外还可以通过availablePermits()方法得到可用的许可数目。</p>
+</div>
+</div>
+<div class="section" id="id9">
+<h2>四.总结<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<p>1）CountDownLatch和CyclicBarrier都能够实现线程之间的等待，只不过它们侧重点不同：</p>
+<p>CountDownLatch一般用于某个线程A等待若干个其他线程执行完任务之后，它才执行；</p>
+<p>而CyclicBarrier一般用于一组线程互相等待至某个状态，然后这一组线程再同时执行；</p>
+<p>另外，CountDownLatch是不能够重用的，而CyclicBarrier是可以重用的。</p>
+<p>2）Semaphore其实和锁有点类似，它一般用于控制对某组资源的访问权限。</p>
+</div>
+<div class="section" id="id10">
+<h2>参考<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<p>CyclicBarrier、CountDownLatch与Semaphore的小记:https://www.cnblogs.com/xiaoxian1369/p/5394733.html</p>
+<p>CountDownLatch、CyclicBarrier、Semaphore的区别:https://blog.csdn.net/koobee1/article/details/79606816</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="java_并发编程09ThreadLocal.html" class="btn btn-neutral float-right" title="java_并发编程09ThreadLocal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="java_并发编程07锁相关小结.html" class="btn btn-neutral float-left" title="java_并发编程07锁相关小结" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, yuanjh
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

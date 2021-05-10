@@ -1,0 +1,427 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>java_并发编程10阻塞队列 &mdash; java基础 v1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="java_并发编程11线程池" href="java_并发编程11线程池.html" />
+    <link rel="prev" title="java_并发编程09ThreadLocal" href="java_并发编程09ThreadLocal.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> java基础
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="java_读书01guide学习笔记.html">java_读书01guide学习笔记</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_读书02java核心面试知识整理.html">java_读书02java核心面试知识整理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_读书03Java基础高频面试题(2021年最新版).html">java_读书03Java基础高频面试题(2021年最新版)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_读书05殷建卫架构笔记之java.html">java_读书05殷建卫架构笔记之java</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础01常见坑.html">java_基础01常见坑</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础02集合.html">java_基础02集合</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础03双亲委派.html">java_基础03双亲委派</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础04内存结构和gc垃圾回收.html">java_基础04内存结构和gc垃圾回收</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程01JMM内存模型.html">java_并发编程01JMM内存模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程02Volatile.html">java_并发编程02Volatile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程03Atomic原子类和CAS.html">java_并发编程03Atomic原子类和CAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程04Synchronized.html">java_并发编程04Synchronized</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程05从锁到ReentrantLock.html">java_并发编程05从锁到ReentrantLock</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程06从ReentrantLock到AQS.html">java_并发编程06从ReentrantLock到AQS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程07锁相关小结.html">java_并发编程07锁相关小结</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程08CyclicBarrier_CountDownLatch_Semaphore.html">java_并发编程08CyclicBarrier_CountDownLatch_Semaphore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程09ThreadLocal.html">java_并发编程09ThreadLocal</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">java_并发编程10阻塞队列</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">四种处理策略</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#java">Java里的阻塞队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">实现原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">其他</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">参考</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程11线程池.html">java_并发编程11线程池</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring01读书要点.html">java_spring01读书要点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring02ioc有什么优点.html">java_spring02ioc有什么优点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring03依赖注入与自动装配区别.html">java_spring03依赖注入与自动装配区别</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring04Autowired与Resource差异解析.html">java_spring04Autowired与Resource差异解析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring05循环依赖.html">java_spring05循环依赖</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_mybatis学习要点.html">java_mybatis学习要点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_微服务01学习笔记.html">java_微服务01学习笔记</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">java基础</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>java_并发编程10阻塞队列</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/java_并发编程10阻塞队列.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="java-10">
+<h1>java_并发编程10阻塞队列<a class="headerlink" href="#java-10" title="Permalink to this headline">¶</a></h1>
+<p>阻塞队列（BlockingQueue）是一个支持两个附加操作的队列。这两个附加的操作是：在队列为空时，获取元素的线程会等待队列变为非空。当队列满时，存储元素的线程会等待队列可用。阻塞队列常用于生产者和消费者的场景，生产者是往队列里添加元素的线程，消费者是从队列里拿元素的线程。阻塞队列就是生产者存放元素的容器，而消费者也只从容器里拿元素。</p>
+<div class="section" id="id1">
+<h2>四种处理策略<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>| 方法\处理方式 |  抛出异常  | 返回特殊值 | 一直阻塞 |      超时退出       |
+| ———— | ——— | ——– | —— | —————– |
+| 插入方法      | add(e)    | offer(e) | put(e) | offer(e,time,unit) |
+| 移除方法      | remove() | poll()   | take() | poll(time,unit)    |
+| 检查方法      | element() | peek()   | 不可用   | 不可用              |</p>
+<p><strong>抛出异常</strong>：是指当阻塞队列满时候，再往队列里插入元素，会抛出IllegalStateException(“Queue full”)异常。当队列为空时，从队列里获取元素时会抛出NoSuchElementException异常 。</p>
+<p><strong>返回特殊值</strong>：插入方法会返回是否成功，成功则返回true。移除方法，则是从队列里拿出一个元素，如果没有则返回null</p>
+<p><strong>一直阻塞</strong>：当阻塞队列满时，如果生产者线程往队列里put元素，队列会一直阻塞生产者线程，直到拿到数据，或者响应中断退出。当队列空时，消费者线程试图从队列里take元素，队列也会阻塞消费者线程，直到队列可用。</p>
+<p><strong>超时退出</strong>：当阻塞队列满时，队列会阻塞生产者线程一段时间，如果超过一定的时间，生产者线程就会退出。</p>
+</div>
+<div class="section" id="java">
+<h2>Java里的阻塞队列<a class="headerlink" href="#java" title="Permalink to this headline">¶</a></h2>
+<p>JDK7提供了7个阻塞队列。分别是</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ArrayBlockingQueue ：一个由数组结构组成的有界阻塞队列。
+LinkedBlockingQueue ：一个由链表结构组成的有界阻塞队列。
+PriorityBlockingQueue ：一个支持优先级排序的无界阻塞队列。
+DelayQueue：一个使用优先级队列实现的无界阻塞队列。
+SynchronousQueue：一个不存储元素的阻塞队列。
+LinkedTransferQueue：一个由链表结构组成的无界阻塞队列。
+LinkedBlockingDeque：一个由链表结构组成的双向阻塞队列。
+</pre></div>
+</div>
+<p><img alt="_images/20210411102438702_1163705731.png" src="_images/20210411102438702_1163705731.png" /></p>
+</div>
+<div class="section" id="id2">
+<h2>实现原理<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>本文以ArrayBlockingQueue为例，其他阻塞队列实现原理可能和ArrayBlockingQueue有一些差别，但是大体思路应该类似，有兴趣的朋友可自行查看其他阻塞队列的实现源码。</p>
+<p>首先看一下ArrayBlockingQueue类中的几个成员变量：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">ArrayBlockingQueue</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">extends</span> <span class="n">AbstractQueue</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span>
+<span class="n">implements</span> <span class="n">BlockingQueue</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">java</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">Serializable</span> <span class="p">{</span>
+ 
+<span class="n">private</span> <span class="n">static</span> <span class="n">final</span> <span class="n">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="o">-</span><span class="mi">817911632652898426</span><span class="n">L</span><span class="p">;</span>
+ 
+<span class="o">/**</span> <span class="n">The</span> <span class="n">queued</span> <span class="n">items</span>  <span class="o">*/</span>
+<span class="n">private</span> <span class="n">final</span> <span class="n">E</span><span class="p">[]</span> <span class="n">items</span><span class="p">;</span>
+<span class="o">/**</span> <span class="n">items</span> <span class="n">index</span> <span class="k">for</span> <span class="nb">next</span> <span class="n">take</span><span class="p">,</span> <span class="n">poll</span> <span class="ow">or</span> <span class="n">remove</span> <span class="o">*/</span>
+<span class="n">private</span> <span class="nb">int</span> <span class="n">takeIndex</span><span class="p">;</span>
+<span class="o">/**</span> <span class="n">items</span> <span class="n">index</span> <span class="k">for</span> <span class="nb">next</span> <span class="n">put</span><span class="p">,</span> <span class="n">offer</span><span class="p">,</span> <span class="ow">or</span> <span class="n">add</span><span class="o">.</span> <span class="o">*/</span>
+<span class="n">private</span> <span class="nb">int</span> <span class="n">putIndex</span><span class="p">;</span>
+<span class="o">/**</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">items</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">queue</span> <span class="o">*/</span>
+<span class="n">private</span> <span class="nb">int</span> <span class="n">count</span><span class="p">;</span>
+ 
+<span class="o">/*</span>
+<span class="o">*</span> <span class="n">Concurrency</span> <span class="n">control</span> <span class="n">uses</span> <span class="n">the</span> <span class="n">classic</span> <span class="n">two</span><span class="o">-</span><span class="n">condition</span> <span class="n">algorithm</span>
+<span class="o">*</span> <span class="n">found</span> <span class="ow">in</span> <span class="nb">any</span> <span class="n">textbook</span><span class="o">.</span>
+<span class="o">*/</span>
+ 
+<span class="o">/**</span> <span class="n">Main</span> <span class="n">lock</span> <span class="n">guarding</span> <span class="nb">all</span> <span class="n">access</span> <span class="o">*/</span>
+<span class="n">private</span> <span class="n">final</span> <span class="n">ReentrantLock</span> <span class="n">lock</span><span class="p">;</span>
+<span class="o">/**</span> <span class="n">Condition</span> <span class="k">for</span> <span class="n">waiting</span> <span class="n">takes</span> <span class="o">*/</span>
+<span class="n">private</span> <span class="n">final</span> <span class="n">Condition</span> <span class="n">notEmpty</span><span class="p">;</span>
+<span class="o">/**</span> <span class="n">Condition</span> <span class="k">for</span> <span class="n">waiting</span> <span class="n">puts</span> <span class="o">*/</span>
+<span class="n">private</span> <span class="n">final</span> <span class="n">Condition</span> <span class="n">notFull</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>核心元素</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Object[] items：存放元素的数组
+int takeIndex：下一个读操作的位置
+int putIndex：下一个写操作的位置
+int count：数组中元素的数量
+ReentrantLock lock：同步器
+Condition notEmpty：数组空了，读等待。写的时候，唤醒
+Condition notFull：数组满了，写等待。读的时候，唤醒
+</pre></div>
+</div>
+<p>可以看出，ArrayBlockingQueue中用来存储元素的实际上是一个数组，takeIndex和putIndex分别表示队首元素和队尾元素的下标，count表示队列中元素的个数。</p>
+<p>lock是一个可重入锁，notEmpty和notFull是等待条件。</p>
+<p>下面看一下ArrayBlockingQueue的构造器，构造器有三个重载版本：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public ArrayBlockingQueue(int capacity) {
+}
+public ArrayBlockingQueue(int capacity, boolean fair) {
+ 
+}
+public ArrayBlockingQueue(int capacity, boolean fair,
+                          Collection&lt;? extends E&gt; c) {
+}
+</pre></div>
+</div>
+<p>第一个构造器只有一个参数用来指定容量，第二个构造器可以指定容量和公平性，第三个构造器可以指定容量、公平性以及用另外一个集合进行初始化。</p>
+<p>然后看它的两个关键方法的实现：put()和take()：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">void</span> <span class="n">put</span><span class="p">(</span><span class="n">E</span> <span class="n">e</span><span class="p">)</span> <span class="n">throws</span> <span class="n">InterruptedException</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">e</span> <span class="o">==</span> <span class="n">null</span><span class="p">)</span> <span class="n">throw</span> <span class="n">new</span> <span class="n">NullPointerException</span><span class="p">();</span>
+    <span class="n">final</span> <span class="n">E</span><span class="p">[]</span> <span class="n">items</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">items</span><span class="p">;</span>
+    <span class="n">final</span> <span class="n">ReentrantLock</span> <span class="n">lock</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">lock</span><span class="p">;</span>
+    <span class="n">lock</span><span class="o">.</span><span class="n">lockInterruptibly</span><span class="p">();</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="n">items</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
+                <span class="n">notFull</span><span class="o">.</span><span class="k">await</span><span class="p">();</span>
+        <span class="p">}</span> <span class="n">catch</span> <span class="p">(</span><span class="n">InterruptedException</span> <span class="n">ie</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">notFull</span><span class="o">.</span><span class="n">signal</span><span class="p">();</span> <span class="o">//</span> <span class="n">propagate</span> <span class="n">to</span> <span class="n">non</span><span class="o">-</span><span class="n">interrupted</span> <span class="n">thread</span>
+            <span class="n">throw</span> <span class="n">ie</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">insert</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">finally</span> <span class="p">{</span>
+        <span class="n">lock</span><span class="o">.</span><span class="n">unlock</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>从put方法的实现可以看出，它先获取了锁，并且获取的是可中断锁，然后判断当前元素个数是否等于数组的长度，如果相等，则调用notFull.await()进行等待，如果捕获到中断异常，则唤醒线程并抛出异常。</p>
+<p>当被其他线程唤醒时，通过insert(e)方法插入元素，最后解锁。</p>
+<p>我们看一下insert方法的实现：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">private</span> <span class="n">void</span> <span class="n">insert</span><span class="p">(</span><span class="n">E</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">items</span><span class="p">[</span><span class="n">putIndex</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+    <span class="n">putIndex</span> <span class="o">=</span> <span class="n">inc</span><span class="p">(</span><span class="n">putIndex</span><span class="p">);</span>
+    <span class="o">++</span><span class="n">count</span><span class="p">;</span>
+    <span class="n">notEmpty</span><span class="o">.</span><span class="n">signal</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>它是一个private方法，插入成功后，通过notEmpty唤醒正在等待取元素的线程。</p>
+<p>下面是take()方法的实现：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">E</span> <span class="n">take</span><span class="p">()</span> <span class="n">throws</span> <span class="n">InterruptedException</span> <span class="p">{</span>
+    <span class="n">final</span> <span class="n">ReentrantLock</span> <span class="n">lock</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">lock</span><span class="p">;</span>
+    <span class="n">lock</span><span class="o">.</span><span class="n">lockInterruptibly</span><span class="p">();</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">notEmpty</span><span class="o">.</span><span class="k">await</span><span class="p">();</span>
+        <span class="p">}</span> <span class="n">catch</span> <span class="p">(</span><span class="n">InterruptedException</span> <span class="n">ie</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">notEmpty</span><span class="o">.</span><span class="n">signal</span><span class="p">();</span> <span class="o">//</span> <span class="n">propagate</span> <span class="n">to</span> <span class="n">non</span><span class="o">-</span><span class="n">interrupted</span> <span class="n">thread</span>
+            <span class="n">throw</span> <span class="n">ie</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">E</span> <span class="n">x</span> <span class="o">=</span> <span class="n">extract</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">finally</span> <span class="p">{</span>
+        <span class="n">lock</span><span class="o">.</span><span class="n">unlock</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>跟put方法实现很类似，只不过put方法等待的是notFull信号，而take方法等待的是notEmpty信号。在take方法中，如果可以取元素，则通过extract方法取得元素，下面是extract方法的实现：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">private</span> <span class="n">E</span> <span class="n">extract</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">final</span> <span class="n">E</span><span class="p">[]</span> <span class="n">items</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">items</span><span class="p">;</span>
+    <span class="n">E</span> <span class="n">x</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="n">takeIndex</span><span class="p">];</span>
+    <span class="n">items</span><span class="p">[</span><span class="n">takeIndex</span><span class="p">]</span> <span class="o">=</span> <span class="n">null</span><span class="p">;</span>
+    <span class="n">takeIndex</span> <span class="o">=</span> <span class="n">inc</span><span class="p">(</span><span class="n">takeIndex</span><span class="p">);</span>
+    <span class="o">--</span><span class="n">count</span><span class="p">;</span>
+    <span class="n">notFull</span><span class="o">.</span><span class="n">signal</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>跟insert方法也很类似。</p>
+<p>其实从这里大家应该明白了阻塞队列的实现原理，事实它和我们用Object.wait()、Object.notify()和非阻塞队列实现生产者-消费者的思路类似，只不过它把这些工作一起集成到了阻塞队列中实现。</p>
+</div>
+<div class="section" id="id3">
+<h2>其他<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>常见有界队列</p>
+<p>ArrayBlockingQueue 基于数组实现的阻塞队列</p>
+<p>LinkedBlockingQueue 其实也是有界队列，但是不设置大小时就是无界的。</p>
+<p>ArrayBlockingQueue 与 LinkedBlockingQueue 对比一哈</p>
+<p>ArrayBlockingQueue 实现简单，表现稳定，添加和删除使用同一个锁，通常性能不如后者</p>
+<p>LinkedBlockingQueue 添加和删除两把锁是分开的，所以竞争会小一些</p>
+<p>SynchronousQueue 比较奇葩，<strong>内部容量为零，适用于元素数量少的场景，尤其特别适合做交换数据用</strong>，内部使用 队列来实现公平性的调度，使用栈来实现非公平的调度，在Java6时替换了原来的锁逻辑，使用<strong>CAS代替</strong>了</p>
+<p>上面三个队列他们也是存在共性的</p>
+<p>put take 操作都是阻塞的</p>
+<p>offer poll 操作不是阻塞的，offer 队列满了会返回false不会阻塞，poll 队列为空时会返回null不会阻塞</p>
+<p>补充一点，并不是在所有场景下，非阻塞都是好的，<strong>阻塞代表着不占用CPU</strong>，在有些场景也是需要阻塞的，put take 存在必有其存在的必然性</p>
+<p>常见无界队列</p>
+<p>ConcurrentLinkedQueue <strong>无锁队列</strong>，底层使用<strong>CAS操作</strong>，通常具有<strong>较高吞吐量</strong>，但是具有<strong>读性能的不确定性</strong>，弱一致性——不存在如ArrayList等集合类的并发修改异常，通俗的说就是<strong>遍历时修改不会抛异常</strong></p>
+<p>PriorityBlockingQueue 具有优先级的阻塞队列</p>
+<p>DelayedQueue 延时队列，使用场景</p>
+<p>缓存：清掉缓存中超时的缓存数据</p>
+<p>任务超时处理</p>
+<p>补充：内部实现其实是<strong>采用带时间的优先队列</strong>，可重入锁，优化阻塞通知的线程元素leader</p>
+<p>LinkedTransferQueue 简单的说也是进行<strong>线程间数据交换的利器</strong>，在SynchronousQueue 中就有所体现，并且并发大神 Doug Lea 对其进行了极致的优化，使用15个对象填充，加上本身4字节，总共64字节就可以避免缓存行中的伪共享问题，其实现细节较为复杂，</p>
+</div>
+<div class="section" id="id4">
+<h2>参考<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>深入剖析java并发之阻塞队列LinkedBlockingQueue与ArrayBlockingQueue：https://blog.csdn.net/javazejian/article/details/77410889</p>
+<p>聊聊并发（七）——Java中的阻塞队列:https://ifeve.com/java-blocking-queue/</p>
+<p>Java并发之阻塞队列浅析:https://www.cnblogs.com/NathanYang/p/11276428.html</p>
+<p>Java并发编程：阻塞队列:https://www.cnblogs.com/dolphin0520/p/3932906.html</p>
+<p>java并发编程学习之阻塞队列:https://segmentfault.com/a/1190000019919563?utm_source=sf-similar-article</p>
+<p>Java并发系列 — 阻塞队列（BlockingQueue）:https://juejin.cn/post/6844903640709201934?utm_source=gold_browser_extension</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="java_并发编程11线程池.html" class="btn btn-neutral float-right" title="java_并发编程11线程池" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="java_并发编程09ThreadLocal.html" class="btn btn-neutral float-left" title="java_并发编程09ThreadLocal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, yuanjh
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

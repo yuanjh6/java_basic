@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>java_读书05殷建卫架构笔记之java &mdash; java基础 v1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="java_基础01常见坑" href="java_基础01常见坑.html" />
+    <link rel="prev" title="java_读书03Java基础高频面试题(2021年最新版)" href="java_读书03Java基础高频面试题(2021年最新版).html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> java基础
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="java_读书01guide学习笔记.html">java_读书01guide学习笔记</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_读书02java核心面试知识整理.html">java_读书02java核心面试知识整理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_读书03Java基础高频面试题(2021年最新版).html">java_读书03Java基础高频面试题(2021年最新版)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">java_读书05殷建卫架构笔记之java</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sleep">sleep 时的线程状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#daemon">Daemon 线程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#threadinterrupt">Thread类中interrupt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#java">Java线程等待唤醒机制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">线程的安全性问题</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础01常见坑.html">java_基础01常见坑</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础02集合.html">java_基础02集合</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础03双亲委派.html">java_基础03双亲委派</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础04内存结构和gc垃圾回收.html">java_基础04内存结构和gc垃圾回收</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程01JMM内存模型.html">java_并发编程01JMM内存模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程02Volatile.html">java_并发编程02Volatile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程03Atomic原子类和CAS.html">java_并发编程03Atomic原子类和CAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程04Synchronized.html">java_并发编程04Synchronized</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程05从锁到ReentrantLock.html">java_并发编程05从锁到ReentrantLock</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程06从ReentrantLock到AQS.html">java_并发编程06从ReentrantLock到AQS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程07锁相关小结.html">java_并发编程07锁相关小结</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程08CyclicBarrier_CountDownLatch_Semaphore.html">java_并发编程08CyclicBarrier_CountDownLatch_Semaphore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程09ThreadLocal.html">java_并发编程09ThreadLocal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程10阻塞队列.html">java_并发编程10阻塞队列</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程11线程池.html">java_并发编程11线程池</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring01读书要点.html">java_spring01读书要点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring02ioc有什么优点.html">java_spring02ioc有什么优点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring03依赖注入与自动装配区别.html">java_spring03依赖注入与自动装配区别</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring04Autowired与Resource差异解析.html">java_spring04Autowired与Resource差异解析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring05循环依赖.html">java_spring05循环依赖</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_mybatis学习要点.html">java_mybatis学习要点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_微服务01学习笔记.html">java_微服务01学习笔记</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">java基础</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>java_读书05殷建卫架构笔记之java</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/java_读书05殷建卫架构笔记之java.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="java-05java">
+<h1>java_读书05殷建卫架构笔记之java<a class="headerlink" href="#java-05java" title="Permalink to this headline">¶</a></h1>
+<p>并发编程基础:https://www.yuque.com/yinjianwei/vyrvkf/hfsk8i#14cba095</p>
+<div class="section" id="sleep">
+<h2>sleep 时的线程状态<a class="headerlink" href="#sleep" title="Permalink to this headline">¶</a></h2>
+<p>进入 TIMED_WAITING 状态的另一种常见情形是调用的 sleep 方法，单独的线程也可以调用，不一定非要有协作关系，当然，依旧可以将它视作为一种特殊的 wait/notify 情形。</p>
+<p>这种情况下就是完全靠“自带闹钟”来通知了。</p>
+<p>另：sleep(0) 跟 wait(0) 是不一样的，sleep 不存在无限等待的情况，sleep(0) 相当于几乎不等待。</p>
+<p>需要注意，sleep 方法没有任何同步语义。通常，我们会说，sleep 方法不会释放锁。这种说法不能说说错了，但不是很恰当。</p>
+<p>打个不太确切的比方，就好比你指着一个大老爷们说：“他下个月不会来大姨妈”，那么，我们能说你说错了吗？但是，显得很怪异。</p>
+<p>就锁这个问题而言，确切的讲法是 sleep 是跟锁无关的。</p>
+</div>
+<div class="section" id="daemon">
+<h2>Daemon 线程<a class="headerlink" href="#daemon" title="Permalink to this headline">¶</a></h2>
+<p>Daemon 线程是一种支持型线程，因为它主要被用作程序中后台调度以及支持性工作。这意味着，当一个 Java 虚拟机中不存在非 Daemon 线程的时候，Java 虚拟机将会退出。</p>
+<p>注意：Daemon 属性需要在启动线程之前设置，不能在启动线程之后设置。</p>
+<p>注意：在构建 Daemon 线程时，不能依靠 finally 块中的内容来确保执行关闭或清理资源的逻辑</p>
+</div>
+<div class="section" id="threadinterrupt">
+<h2>Thread类中interrupt<a class="headerlink" href="#threadinterrupt" title="Permalink to this headline">¶</a></h2>
+<p>Thread类中interrupt（）、interrupted（）和isInterrupted（）方法详解:https://blog.csdn.net/qq_39682377/article/details/81449451</p>
+<p>最后总结，关于这三个方法，interrupt（）是给线程设置中断标志；interrupted（）是检测中断并清除中断状态；isInterrupted（）只检测中断。还有重要的一点就是interrupted（）作用于当前线程，interrupt（）和isInterrupted（）作用于此线程，即代码中调用此方法的实例所代表的线程。</p>
+<p>Java线程的传说(1)——中断线程Interrupted的用处：https://blog.csdn.net/budapest/article/details/6941802；”没有任何语言方面的需求要求一个被中断的程序应该终止。中断一个线程只是为了引起该线程的注意，被中断线程可以决定如何应对中断 “。</p>
+</div>
+<div class="section" id="java">
+<h2>Java线程等待唤醒机制<a class="headerlink" href="#java" title="Permalink to this headline">¶</a></h2>
+<p>Java线程等待唤醒机制（加深理解）：https://blog.csdn.net/jdsjlzx/article/details/98470930</p>
+<p>几个方法的比较</p>
+<p>Thread.sleep(long millis)，一定是当前线程调用此方法，当前线程进入TIMED_WAITING状态，但不释放对象锁，millis后线程自动苏醒进入就绪状态。作用：给其它线程执行机会的最佳方式。</p>
+<p>Thread.yield()，一定是当前线程调用此方法，当前线程放弃获取的CPU时间片，但不释放锁资源，由运行状态变为就绪状态，让OS再次选择线程。作用：让相同优先级的线程轮流执行，但并不保证一定会轮流执行。实际中无法保证yield()达到让步目的，因为让步的线程还有可能被线程调度程序再次选中。Thread.yield()不会导致阻塞。该方法与sleep()类似，只是不能由用户指定暂停多长时间。</p>
+<p>thread.join()/thread.join(long millis)，当前线程里调用其它线程t的join方法，当前线程进入WAITING/TIMED_WAITING状态，当前线程不会释放已经持有的对象锁。线程t执行完毕或者millis时间到，当前线程一般情况下进入RUNNABLE状态，也有可能进入BLOCKED状态（因为join是基于wait实现的）。</p>
+<p>obj.wait()，当前线程调用对象的wait()方法，当前线程释放对象锁，进入等待队列。依靠notify()/notifyAll()唤醒或者wait(long timeout) timeout时间到自动唤醒。</p>
+<p>obj.notify()唤醒在此对象监视器上等待的单个线程，选择是任意性的。notifyAll()唤醒在此对象监视器上等待的所有线程。</p>
+<p>LockSupport.park()/LockSupport.parkNanos(long nanos),LockSupport.parkUntil(long deadlines), 当前线程进入WAITING/TIMED_WAITING状态。对比wait方法,不需要获得锁就可以让线程进入WAITING/TIMED_WAITING状态，需要通过LockSupport.unpark(Thread thread)唤醒。</p>
+<p>sleep()方法与yield()方法区别：</p>
+<p>sleep()方法暂停当前线程后，会给其他线程执行机会，不会理会其他线程优先级。yield()方法只会给同优先级或更高优先级线程执行机会。</p>
+<p>sleep()方法将当前线程转入阻塞状态，而yield()强制将当前线程转入就绪状态，因此完全可能某个线程调用yield()后立即再次获得CPU资源。</p>
+<p>sleep()方法申明抛出InterruptException异常，要么捕捉要么显示抛出，而yield()没有申明抛出任何异常。</p>
+<p>sleep()比yield()有更好的移植性，不建议yield()控制并发线程执行。</p>
+</div>
+<div class="section" id="id1">
+<h2>线程的安全性问题<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>https://www.yuque.com/yinjianwei/vyrvkf/ygfq5z</p>
+<p>可见性、原子性、有序性</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="java_基础01常见坑.html" class="btn btn-neutral float-right" title="java_基础01常见坑" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="java_读书03Java基础高频面试题(2021年最新版).html" class="btn btn-neutral float-left" title="java_读书03Java基础高频面试题(2021年最新版)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, yuanjh
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

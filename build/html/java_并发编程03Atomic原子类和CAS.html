@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>java_并发编程03Atomic原子类和CAS &mdash; java基础 v1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="java_并发编程04Synchronized" href="java_并发编程04Synchronized.html" />
+    <link rel="prev" title="java_并发编程02Volatile" href="java_并发编程02Volatile.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> java基础
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="java_读书01guide学习笔记.html">java_读书01guide学习笔记</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_读书02java核心面试知识整理.html">java_读书02java核心面试知识整理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_读书03Java基础高频面试题(2021年最新版).html">java_读书03Java基础高频面试题(2021年最新版)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_读书05殷建卫架构笔记之java.html">java_读书05殷建卫架构笔记之java</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础01常见坑.html">java_基础01常见坑</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础02集合.html">java_基础02集合</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础03双亲委派.html">java_基础03双亲委派</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础04内存结构和gc垃圾回收.html">java_基础04内存结构和gc垃圾回收</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程01JMM内存模型.html">java_并发编程01JMM内存模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程02Volatile.html">java_并发编程02Volatile</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">java_并发编程03Atomic原子类和CAS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">4种类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomicinteger">AtomicInteger 类的原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cas">CAS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unsafe">Unsafe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">参考</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程04Synchronized.html">java_并发编程04Synchronized</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程05从锁到ReentrantLock.html">java_并发编程05从锁到ReentrantLock</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程06从ReentrantLock到AQS.html">java_并发编程06从ReentrantLock到AQS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程07锁相关小结.html">java_并发编程07锁相关小结</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程08CyclicBarrier_CountDownLatch_Semaphore.html">java_并发编程08CyclicBarrier_CountDownLatch_Semaphore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程09ThreadLocal.html">java_并发编程09ThreadLocal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程10阻塞队列.html">java_并发编程10阻塞队列</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程11线程池.html">java_并发编程11线程池</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring01读书要点.html">java_spring01读书要点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring02ioc有什么优点.html">java_spring02ioc有什么优点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring03依赖注入与自动装配区别.html">java_spring03依赖注入与自动装配区别</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring04Autowired与Resource差异解析.html">java_spring04Autowired与Resource差异解析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring05循环依赖.html">java_spring05循环依赖</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_mybatis学习要点.html">java_mybatis学习要点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_微服务01学习笔记.html">java_微服务01学习笔记</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">java基础</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>java_并发编程03Atomic原子类和CAS</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/java_并发编程03Atomic原子类和CAS.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="java-03atomiccas">
+<h1>java_并发编程03Atomic原子类和CAS<a class="headerlink" href="#java-03atomiccas" title="Permalink to this headline">¶</a></h1>
+<p>Java从JDK1.5开始提供了java.util.concurrent.atomic包，方便程序员在多线程环境下，<strong>无锁的进行原子操作</strong>,其中包括：AtomicBoolean、AtomicInteger、AtomicLong、AtomicReference。其底层就是<strong>volatile和CAS 共同作用的结果</strong>：</p>
+<p>volatile 保证了内存可见性。</p>
+<p>CAS（compare-and-swap）算法保证了原子性。 其中CAS算法的原理就是里面包含三个值：内存值A 预估值V 更新值 B 当且仅当 V == A 时，V = B; 否则，不会执行任何操作。</p>
+<div class="section" id="id1">
+<h2>4种类型<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p><strong>基本类型</strong>:使用原子的方式更新基本类型</p>
+<p>AtomicInteger：整形原子类</p>
+<p>AtomicLong：长整型原子类</p>
+<p>AtomicBoolean：布尔型原子类</p>
+<p><strong>数组类型</strong>:使用原子的方式更新数组里的某个元素</p>
+<p>AtomicIntegerArray：整形数组原子类</p>
+<p>AtomicLongArray：长整形数组原子类</p>
+<p>AtomicReferenceArray：引用类型数组原子类</p>
+<p><strong>引用类型</strong></p>
+<p>AtomicReference：引用类型原子类</p>
+<p>AtomicStampedReference：原子更新引用类型里的字段原子类</p>
+<p>AtomicMarkableReference ：原子更新带有标记位的引用类型</p>
+<p><strong>对象的属性修改类型</strong></p>
+<p>AtomicIntegerFieldUpdater：原子更新整形字段的更新器</p>
+<p>AtomicLongFieldUpdater：原子更新长整形字段的更新器</p>
+<p>AtomicStampedReference：原子更新带有版本号的引用类型。该类将整数值与引用关联起来，可用于解决原子的更新数据和数据的版本号，可以解决使用 CAS 进行原子更新时可能出现的 ABA 问题。</p>
+</div>
+<div class="section" id="atomicinteger">
+<h2>AtomicInteger 类的原理<a class="headerlink" href="#atomicinteger" title="Permalink to this headline">¶</a></h2>
+<p>利用unsafe提供的原子性操作方法。用volatile关键字来保证（保证线程间的可见性）。</p>
+<p>atomic 主要利用 CAS (Compare And Swap) 和 volatile 和 native 方法来保证原子操作，从而避免 synchronized 的高开销，执行效率大为提升。</p>
+<p>AtomicInteger 类为例，部分源码如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>// setup to use Unsafe.compareAndSwapInt for updates（更新操作时提供“比较并替换”的作用）
+private static final Unsafe unsafe = Unsafe.getUnsafe();
+private static final long valueOffset;
+
+static {
+    try {
+        valueOffset = unsafe.objectFieldOffset
+            (AtomicInteger.class.getDeclaredField(&quot;value&quot;));
+    } catch (Exception ex) { throw new Error(ex); }
+}
+
+private volatile int value;
+</pre></div>
+</div>
+<p>AtomicInteger 类主要利用<strong>CAS (compare and swap) + volatile 和 native 方法来保证原子操作</strong>，从而避免 synchronized 的高开销，执行效率大为提升。</p>
+<p>CAS的原理是拿期望的值和原本的一个值作比较，如果相同则更新成新的值。UnSafe 类的 objectFieldOffset() 方法是一个本地方法，这个方法是用来拿到“原来的值”的内存地址。另外 value 是一个volatile变量，在内存中可见，因此 JVM 可以保证任何时刻任何线程总能拿到该变量的最新值。</p>
+<p>由于AtomicLong使用CAS：在一个死循环内不断尝试修改目标值直到修改成功。<strong>如果在竞争不激烈的情况下</strong>（主要指代写入竞争），它修改成功概率很高。反之，如果<strong>在(写入)竞争激烈的情况下，修改失败的概率会很高</strong>，它就会进行多次的循环尝试，因此性能会受到一些影响。</p>
+</div>
+<div class="section" id="cas">
+<h2>CAS<a class="headerlink" href="#cas" title="Permalink to this headline">¶</a></h2>
+<p>CAS是英文单词Compare and Swap的缩写，翻译过来就是<strong>比较并替换</strong>。一条cpu并发原语，判断内存中某个位置的值是否为预期值，如果是则更改为新值，这个过程是<strong>原子的</strong>。  CAS机制中使用了3个基本操作数：内存地址V，旧的预期值A，要修改的新值B。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>//对象，内存偏移量，增加量
+public final int getAndAddInt(Object var1, long var2, int var4) {
+	//var5存储的是期望值
+    int var5;
+    //自旋锁基本思想
+    do {
+    	//获得主物理内存中的值
+        var5 = this.getIntVolatile(var1, var2);
+    }//比较并交换 
+    while(!this.compareAndSwapInt(var1, var2, var5, var5 + var4));
+	//返回修改后的值
+    return var5;
+}
+</pre></div>
+</div>
+<p>JVM会帮我们实现出CAS汇编指令，完全依赖于硬件的功能，通过它实现了原子操作。</p>
+<p>CAS是一种系统原语，由若干条指令组成。且原语的执行必须是连续的，执行过程中不允许被打断，也就是说CAS是一条CPU的原子指令，不会造成所谓的数据不一致问题</p>
+<p><strong>CAS的缺点</strong></p>
+<p>1） CPU开销过大，并发量比较高的情况下，线程反复尝试更新某一个变量</p>
+<p>2） 不能保证代码块的原子性（只能解决一个变量的线程安全问题）</p>
+<p>3） ABA问题</p>
+<p>如下图</p>
+<p><img alt="_images/20210405102534816_211443629.png" src="_images/20210405102534816_211443629.png" /></p>
+<p>这就是典型的CAS的ABA问题，一般情况这种情况发现的概率比较小，<strong>可能发生了也不会造成什么问题</strong>，比如说我们对某个做加减法，不关心数字的过程，那么发生ABA问题也没啥关系。</p>
+<p>但有时会有影响，</p>
+<p><strong>ABA会引发问题的额情况</strong></p>
+<p>再看一个堆栈操作的例子：</p>
+<p>并发1（上）：读取栈顶的元素为“A1”</p>
+<p><img alt="_images/20210405103825861_1323459090.png" src="_images/20210405103825861_1323459090.png" /></p>
+<p>并发2：进行了2次出栈</p>
+<p><img alt="_images/20210405103837983_1869824119.png" src="_images/20210405103837983_1869824119.png" /></p>
+<p>并发3：又进行了1次出栈</p>
+<p><img alt="_images/20210405103902721_1398176886.png" src="_images/20210405103902721_1398176886.png" /></p>
+<p>并发1（下）：实施CAS乐观锁，发现栈顶还是“A1”，于是修改为A2</p>
+<p><img alt="_images/20210405103915470_469173910.png" src="_images/20210405103915470_469173910.png" /></p>
+<p>此时会出现系统错误，因为此“A1”非彼“A1”</p>
+<p><img alt="_images/20210405103936581_835979039.png" src="_images/20210405103936581_835979039.png" /></p>
+<p><strong>解决ABA问题</strong></p>
+<p>01,版本号，每修改一次，版本号加一(AtomicReference)。</p>
+<p>02,利用版本号（时间戳）来保证解决ABA的问题，也就是说保证每一行的数据都是保证唯一的(AtomicStampedReference)</p>
+</div>
+<div class="section" id="unsafe">
+<h2>Unsafe<a class="headerlink" href="#unsafe" title="Permalink to this headline">¶</a></h2>
+<p>Unsafe是CAS的核心类，由于Java方法无法直接访问操作系统低层，需要通过本地native方法来访问，Unsafe相当于一个后门，基于该类可以直接操作特定内存的数据</p>
+<p>Unsafe类中的方法大多数都被native修饰，也就是说<strong>Unsafe类直接调用操作系统的底层资源去执行相应任务</strong>。</p>
+</div>
+<div class="section" id="id2">
+<h2>参考<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>【Java并发编程】之 Atomic 原子类：https://blog.csdn.net/aiwangtingyun/article/details/107140826</p>
+<p>Java并发编程之原子性-Atomic详解：https://blog.csdn.net/qq_34871626/article/details/81411815</p>
+<p>Java并发编程-AtomicXXX：https://blog.csdn.net/weixin_33910460/article/details/92687767</p>
+<p>Java并发编程-AtomicInteger-CAS底层原理：https://blog.csdn.net/weixin_41730409/article/details/104465098</p>
+<p>Java并发编程-无锁CAS与Unsafe类及其并发包Atomic：https://blog.csdn.net/javazejian/article/details/72772470#t11</p>
+<p>CAS下ABA问题及优化方案：https://blog.csdn.net/wufaliang003/article/details/78797203</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="java_并发编程04Synchronized.html" class="btn btn-neutral float-right" title="java_并发编程04Synchronized" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="java_并发编程02Volatile.html" class="btn btn-neutral float-left" title="java_并发编程02Volatile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, yuanjh
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

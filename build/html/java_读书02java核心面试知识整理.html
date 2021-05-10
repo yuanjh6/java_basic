@@ -1,0 +1,601 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>java_读书02java核心面试知识整理 &mdash; java基础 v1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="java_读书03Java基础高频面试题(2021年最新版)" href="java_读书03Java基础高频面试题(2021年最新版).html" />
+    <link rel="prev" title="java_读书01guide学习笔记" href="java_读书01guide学习笔记.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> java基础
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="java_读书01guide学习笔记.html">java_读书01guide学习笔记</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">java_读书02java核心面试知识整理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#executorservicecallablefuture">4.1.2 使用ExecutorService、Callable、Future实现有返回结果的线程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">4.1.3 4种线程池</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">4.1.5. 终止线程 4 种方式</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#java">4.1.8 JAVA 后台线程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">4.1.10.线程基本方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">4.1.11 二. 线程上下文切换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#threadlocal">4.1.18 ThreadLocal 作用（线程本地存储）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#concurrenthashmap-todo">ConcurrentHashMap 并发（todo)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">5.1.4 JAVA 内部类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">5.1.5. JAVA 泛型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#java-java">5.1.6. JAVA 序列化(创建可复用的 Java 对象)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">参考</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="java_读书03Java基础高频面试题(2021年最新版).html">java_读书03Java基础高频面试题(2021年最新版)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_读书05殷建卫架构笔记之java.html">java_读书05殷建卫架构笔记之java</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础01常见坑.html">java_基础01常见坑</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础02集合.html">java_基础02集合</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础03双亲委派.html">java_基础03双亲委派</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_基础04内存结构和gc垃圾回收.html">java_基础04内存结构和gc垃圾回收</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程01JMM内存模型.html">java_并发编程01JMM内存模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程02Volatile.html">java_并发编程02Volatile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程03Atomic原子类和CAS.html">java_并发编程03Atomic原子类和CAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程04Synchronized.html">java_并发编程04Synchronized</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程05从锁到ReentrantLock.html">java_并发编程05从锁到ReentrantLock</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程06从ReentrantLock到AQS.html">java_并发编程06从ReentrantLock到AQS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程07锁相关小结.html">java_并发编程07锁相关小结</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程08CyclicBarrier_CountDownLatch_Semaphore.html">java_并发编程08CyclicBarrier_CountDownLatch_Semaphore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程09ThreadLocal.html">java_并发编程09ThreadLocal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程10阻塞队列.html">java_并发编程10阻塞队列</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_并发编程11线程池.html">java_并发编程11线程池</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring01读书要点.html">java_spring01读书要点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring02ioc有什么优点.html">java_spring02ioc有什么优点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring03依赖注入与自动装配区别.html">java_spring03依赖注入与自动装配区别</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring04Autowired与Resource差异解析.html">java_spring04Autowired与Resource差异解析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_spring05循环依赖.html">java_spring05循环依赖</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_mybatis学习要点.html">java_mybatis学习要点</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_微服务01学习笔记.html">java_微服务01学习笔记</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">java基础</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>java_读书02java核心面试知识整理</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/java_读书02java核心面试知识整理.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="java-02java">
+<h1>java_读书02java核心面试知识整理<a class="headerlink" href="#java-02java" title="Permalink to this headline">¶</a></h1>
+<p>JAVA核心面试知识整理.pdf</p>
+<div class="section" id="executorservicecallablefuture">
+<h2>4.1.2 使用ExecutorService、Callable、Future实现有返回结果的线程<a class="headerlink" href="#executorservicecallablefuture" title="Permalink to this headline">¶</a></h2>
+<p>可返回值的任务必须实现Callable接口</p>
+<p>无返回值的任务必须实现Runnable接口</p>
+<p>执行Callable任务后，可以获取一个Future的对象，在该对象上调用get就可以获取到Callable任务返回的Object</p>
+<p>注意：get方法是<strong>阻塞</strong>的，即：线程无返回结果，get方法会一直等待</p>
+</div>
+<div class="section" id="id1">
+<h2>4.1.3 4种线程池<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p><img alt="_images/20210401224142633_1642432599.png" src="_images/20210401224142633_1642432599.png" /></p>
+<p>Java 里面线程池的顶级接口是 Executor,但是严格意义上讲 Executor 并不是一个线程池,而只是一个执行线程的工具。真正的线程池接口是 ExecutorService。</p>
+<p>newCachedThreadPool创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>它比较适合处理执行时间比较小的任务；
+corePoolSize为0，maximumPoolSize为无限大，意味着线程数量可以无限大；
+keepAliveTime为60S，意味着线程空闲时间超过60S就会被杀死；
+采用SynchronousQueue装等待的任务，这个阻塞队列没有存储空间，这意味着只要有请求到来，就必须要找到一条工作线程处理他，如果当前没有空闲的线程，那么就会再创建一条新的线程。
+</pre></div>
+</div>
+<p>newFixedThreadPool 创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>它是一种固定大小的线程池；corePoolSize和maximunPoolSize都为用户设定的线程数量nThreads；
+keepAliveTime为0，意味着一旦有多余的空闲线程，就会被立即停止掉；但这里keepAliveTime无效；
+阻塞队列采用了LinkedBlockingQueue，它是一个无界队列；由于阻塞队列是一个无界队列，因此永远不可能拒绝任务；
+由于采用了无界队列，实际线程数量将永远维持在nThreads，因此maximumPoolSize和keepAliveTime将无效。
+</pre></div>
+</div>
+<p>newScheduledThreadPool 创建一个定长线程池，支持定时及周期性任务执行。</p>
+<p>newSingleThreadExecutor 创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>它只会创建一条工作线程处理任务；
+采用的阻塞队列为LinkedBlockingQueue；
+</pre></div>
+</div>
+<p>java newCachedThreadPool 线程池使用在什么情况下?：https://www.zhihu.com/question/23212914</p>
+<p>handler（饱和策略，或者又称拒绝策略）</p>
+<p>当队列和线程池都满了，即线程池饱和了，必须采取一种策略处理提交的新任务。</p>
+<p>AbortPolicy： 无法处理新任务时，直接抛出异常，这是默认策略。</p>
+<p>CallerRunsPolicy：用调用者所在的线程来执行任务。</p>
+<p>DiscardOldestPolicy：丢弃阻塞队列中最靠前的一个任务，并执行当前任务。</p>
+<p>DiscardPolicy： 直接丢弃任务。</p>
+<p>总结</p>
+<p>| 线程池 | 特点 | 建议使用场景 |
+| — | — | — |
+| newCachedThreadPool | 1、线程数无上限  2、空闲线程存活60s  3、阻塞队列 | 1、任务执行时间短  2、任务要求响应时间短 |
+| newFixedThreadPool | 1、线程数固定  2、无界队列 | 1、任务比较平缓  2、控制最大的线程数 |
+| newScheduledThreadPool | 核心线程数量固定、非核心线程数量无限制（闲置时马上回收） | 执行定时 / 周期性 任务 |
+| newSingleThreadExecutor | 只有一个核心线程（保证所有任务按照指定顺序在一个线程中执行，不需要处理线程同步的问题） | 不适合并发但可能引起IO阻塞性及影响UI线程响应的操作，如数据库操作，文件操作等 |</p>
+<p>使用线程池容易出现的问题</p>
+<p>| 现象 | 原因 |
+| — | — |
+| 整个系统影响缓慢，大部分504 | 1、为设置最大的线程数，任务积压过多，线程数用尽 |
+| oom | 1、队列无界或者size设置过大 |
+| 使用线程池对效率并没有明显的提升 | 1、线程池的参数设置过小，线程数过小或者队列过小，或者是服务器的cpu核数太低 |</p>
+<p><strong>线程池的监控</strong></p>
+<p>为什么要对线程池进行监控</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>线程池中线程数和队列的类型及长度对线程会造成很大的影响，而且会争夺系统稀有资源，线程数。设置不当，或是没有最大的利用系统资源，提高系统的整体运行效率，或是导致整个系统的故障。典型的场景是线程数被占满，其他的请求无响应。或是任务积压过多，直接oom  
+方便的排查线程中的故障以及优化线程池的使用  
+</pre></div>
+</div>
+<p>监控的原理</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>另起一个定时单线程数的线程池newSingleThreadScheduledExecutor  
+调用scheduleAtFixedRate(Runnable command,long initialDelay,long period,TimeUnit unit)定时执行监控任务;  
+定时任务内 通过ThreadPoolExecutor对象获取监控的对象信息，比如t线程池需要执行的任务数、线程池在运行过程中已完成的任务数、曾经创建过的最大线程数、线程池里的线程数量、线程池里活跃的线程数量、当前排队线程数  
+根据预设的日志或报警策略，进行规则控制  
+</pre></div>
+</div>
+<p>需要注意的事项</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>线程数要合理设置，一般建议值是核数的2倍。
+线程池队列的类型和长度要根据业特性合理设置
+不同的业务需要线程池隔离，避免相互影响
+未每个线程池增加特有的命名规范以及关键的日志，方便出问题排查和优化
+</pre></div>
+</div>
+<p>线程池的使用：https://www.ppkanshu.com/index.php/post/2483.html</p>
+</div>
+<div class="section" id="id2">
+<h2>4.1.5. 终止线程 4 种方式<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>4.1.5.1. <strong>正常运行结束</strong></p>
+<p>程序运行结束，线程自动结束。</p>
+<p>4.1.5.2. <strong>使用退出标志退出线程</strong></p>
+<p>一般 run()方法执行完，线程就会正常结束，然而，常常有些线程是伺服线程。它们需要长时间的运行，只有在外部某些条件满足的情况下，才能关闭这些线程。使用一个变量来控制循环，例如： 最直接的方法就是设一个boolean 类型的标志，并通过设置这个标志为true 或 false 来控制while 循环是否退出，代码示例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public class ThreadSafe extends Thread {
+ public volatile boolean exit = false;
+       public void run() {
+             while (!exit){
+             //do something
+              }
+           }
+        }
+</pre></div>
+</div>
+<p>定义了一个退出标志 exit，当 exit 为 true 时，while 循环退出，exit 的默认值为false.在定义 exit 时，使用了一个 Java 关键字 volatile，这个关键字的目的是使 exit 同步，也就是说在同一时刻只能由一个线程来修改 exit 的值。</p>
+<p>4.1.5.3. <strong>Interrupt 方法结束线程</strong></p>
+<p>使用 interrupt()方法来中断线程有两种情况：</p>
+<p><strong>线程处于阻塞状态</strong>：如使用了 sleep,同步锁的 wait,socket 中的 receiver,accept 等方法时， 会使线程处于阻塞状态。当调用线程的 interrupt()方法时，会抛出 InterruptException 异常。阻塞中的那个方法抛出这个异常，通过代码捕获该异常，然后 break 跳出循环状态，从而让我们有机会结束这个线程的执行。通常很多人认为只要调用 interrupt 方法线程就会结束，实际上是错的， 一定要先捕获InterruptedException 异常之后通过break 来跳出循环，才能正常结束 run 方法。
+<strong>线程未处于阻塞状态</strong>：使用 isInterrupted()判断线程的中断标志来退出循环。当使用interrupt()方法时，中断标志就会置 true，和使用自定义的标志来控制循环是一样的道理。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public class ThreadSafe extends Thread {
+    public void run() {
+        while (!isInterrupted()) { //非阻塞过程中通过判断中断标志来退出try{
+            Thread.sleep(5 * 1000);//阻塞过程捕获中断异常来退出
+        }catch(InterruptedException e){
+            e.printStackTrace();
+            break;//捕获到异常之后，执行 break 跳出循环
+        }
+    }
+}
+</pre></div>
+</div>
+<p>4.1.5.4. <strong>stop 方法终止线程（线程不安全）</strong></p>
+<p>程序中可以直接使用thread.stop()来强行终止线程，但是stop 方法是很危险的，就象突然关闭计算机电源，而不是按正常程序关机一样，可能会产生不可预料的结果，不安全主要是：thread.stop()调用之后，创建子线程的线程就会<strong>抛出 ThreadDeatherror 的错误，并且会释放子线程所持有的所有锁</strong>。一般任何进行加锁的代码块，都是为了保护数据的一致性，如果在调用thread.stop()后导致了该线程所持有的所有锁的<strong>突然释放(不可控制)</strong>，那么被保护数据就有可能呈现<strong>不一致性</strong>，其他线程在使用这些被破坏的数据时，有可能导致一些很奇怪的应用程序错误。因此，并不推荐使用stop 方法来终止线程。</p>
+</div>
+<div class="section" id="java">
+<h2>4.1.8 JAVA 后台线程<a class="headerlink" href="#java" title="Permalink to this headline">¶</a></h2>
+<ol class="simple">
+<li>定义：守护线程–也称“服务线程”，他是后台线程，它有一个特性，即为用户线程 提供 公共服务，在没有用户线程可服务时会自动离开。</li>
+<li>优先级：守护线程的<strong>优先级比较低</strong>，用于为系统中的其它对象和线程提供服务。</li>
+<li>设置：通过 <strong>setDaemon(true)来设置线程为“守护线程”</strong>；将一个用户线程设置为守护线程的方式是在 线程对象创建 之前 用线程对象的 setDaemon 方法。</li>
+<li>在 <strong>Daemon 线程中产生的新线程也是 Daemon</strong>的。</li>
+<li><strong>线程则是 JVM 级别</strong>的，以 Tomcat 为例，如果你在 Web 应用中启动一个线程，这个线程的生命周期并不会和 Web 应用程序保持同步。也就是说，即使你停止了 Web 应用，这个线程依旧是活跃的。</li>
+<li>example: <strong>垃圾回收线程就是一个经典的守护线程</strong>，当我们的程序中不再有任何运行的Thread, 程序就不会再产生垃圾，垃圾回收器也就无事可做，所以当垃圾回收线程是<strong>JVM 上仅剩的线程时，垃圾回收线程会自动离开</strong>。它始终在低级别的状态中运行，用于实时监控和管理系统中的可回收资源。</li>
+<li>生命周期：守护进程(Daemon)是运行在后台的一种特殊进程。它独立于控制终端并且周 期性地执行某种任务或等待处理某些发生的事件。也就是说守护线程不依赖于终端，但是<strong>依赖于系统，与系统“同生共死”</strong>。当 JVM 中<strong>所有的线程都是守护线程的时候，JVM 就可以退出</strong>了；如果还有一个或以上的非守护线程则 JVM 不会退出。</li>
+</ol>
+</div>
+<div class="section" id="id3">
+<h2>4.1.10.线程基本方法<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>1.线程等待（wait） 调用该方法的线程进入 WAITING 状态，只有等待另外线程的通知或被中断才会返回，需要注意的是调用 wait()方法后，会释放对象的锁。因此，wait 方法一般用在同步方法或同步代码块中。</p>
+<p>2.线程睡眠（sleep） sleep 导致当前线程休眠，与 wait 方法不同的是 sleep 不会释放当前占有的锁,<strong>sleep(long)会导致线程进入 TIMED-WATING 状态</strong>，而 wait()方法会导致当前线程进入WATING 状态</p>
+<p>3.线程让步（yield） yield 会使当前线程让出 CPU 执行时间片，与其他线程<strong>一起重新竞争 CPU 时间片</strong>。一般情况下， 优先级高的线程有更大的可能性成功竞争得到 CPU 时间片，但这又不是绝对的，有的操作系统对线程优先级并不敏感。</p>
+<p>4.线程中断（interrupt） 中断一个线程，其本意是给这个线程一个<strong>通知信号</strong>，会影响这个线程内部的一个<strong>中断标识位</strong>。这个线程本身并<strong>不会因此而改变状态(如阻塞，终止等)。</strong></p>
+<p>1.调用 interrupt()方法并不会中断一个正在运行的线程。也就是说处于 Running 状态的线程<strong>并不会因为被中断而被终止，仅仅改变了内部维护的中断标识位</strong>而已。</p>
+<p>2.若调用 sleep()而使线程处于 TIMED-WATING 状态，这时调用 interrupt()方法，会<strong>抛出InterruptedException</strong>,从而使线程提前结束 TIMED-WATING 状态。</p>
+<p>3.许多声明抛出InterruptedException 的方法(如Thread.sleep(long mills 方法))，抛出异常前，都会清除中断标识位，所以抛出异常后，调用 isInterrupted()方法将会返回 false。</p>
+<p>4.<strong>中断状态是线程固有的一个标识位，可以通过此标识位安全的终止线程</strong>。比如,你想终止一个线程thread 的时候，可以调用thread.interrupt()方法，在线程的 run 方法内部可以根据thread.isInterrupted()的值来优雅的终止线程。</p>
+<p>5.Join 等待其他线程终止 join() 方法，等待其他线程终止，在当前线程中调用一个线程的 join() 方法，则当前线程转为阻塞状态，回到另一个线程结束，当前线程再由阻塞状态变为就绪状态，等待 cpu 的宠幸。</p>
+<p>6.为什么要用 join()方法？ 很多情况下，主线程生成并启动了子线程，需要用到子线程返回的结果，也就是需要主线程需要在子线程结束后再结束，这时候就要用到 join() 方法。</p>
+<p>7.Object 类中的 notify() 方法，<strong>唤醒在此对象监视器上等待的单个线程</strong>，如果所有线程都在此对象上等待，则会选择唤醒其中一个线程，选择是任意的，并在对实现做出决定时发生，线程通过调用其中一个 wait() 方法，在对象的监视器上等待，直到当前的线程放弃此对象上的锁定，才能继续执行被唤醒的线程，被唤醒的线程将以常规方式与在该对象上主动同步的其他所有线程进行竞争。类似的方法还有 notifyAll() ，唤醒再次监视器上等待的所有线程。</p>
+</div>
+<div class="section" id="id4">
+<h2>4.1.11 二. 线程上下文切换<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>巧妙地利用了时间片轮转的方式, CPU 给每个任务都服务一定的时间，然后把当前任务的状态保存下来，在加载下一任务的状态后，继续服务下一任务，任务的状态保存及再加载, 这段过程就叫做上下文切换。时间片轮转的方式使多个任务在同一颗 CPU 上执行变成了可能。</p>
+<ol class="simple">
+<li>进程</li>
+</ol>
+<p>（有时候也称做任务）是指一个程序运行的实例。在 Linux 系统中，线程就是能并行运行并且与他们的父进程（创建他们的进程）共享同一地址空间（一段内存区域）和其他资源的轻量级的进程。</p>
+<ol class="simple">
+<li>上下文</li>
+</ol>
+<p>是指某一时间点<strong>CPU 寄存器和程序计数器</strong>的内容。</p>
+<ol class="simple">
+<li>寄存器</li>
+</ol>
+<p>是 <strong>CPU 内部的数量较少但是速度很快的内存</strong>（与之对应的是 CPU 外部相对较慢的 RAM 主内存）。寄存器通过对常用值（通常是运算的中间值）的快速访问来提高计算机程序运行的速度。</p>
+<ol class="simple">
+<li>程序计数器</li>
+</ol>
+<p>是一个专用的寄存器，用于表明指令序列中 CPU 正在执行的位置，存的值为正在执行的<strong>指令的位置</strong>或者下一个将要被执行的指令的位置，具体依赖于特定的系统。</p>
+<ol class="simple">
+<li>PCB-“切换桢”</li>
+</ol>
+<p>上下文切换可以认为是内核（操作系统的核心）在 CPU 上对于进程（包括线程）进行切换，<strong>上下文切换过程中的信息是保存在进程控制块</strong>（PCB, process control block）中的。PCB 还经常被称作“切换桢”（switchframe）。信息会一直保存到 CPU 的内存中，直到他们被再次使用。</p>
+<ol class="simple">
+<li>上下文切换的活动：</li>
+</ol>
+<p>（1）. 挂起一个进程，将这个进程在 CPU 中的状态（上下文）存储于内存中的某处。</p>
+<p>（2）. 在内存中检索下一个进程的上下文并将其在 CPU 的寄存器中恢复。</p>
+<p>（3）. 跳转到程序计数器所指向的位置（即跳转到进程被中断时的代码行），以恢复该进程在程序中。</p>
+<ol class="simple">
+<li>引起线程上下文切换的原因</li>
+</ol>
+<p>（1）. 当前执行任务的<strong>时间片用完</strong>之后，系统 CPU 正常调度下一个任务；</p>
+<p>（2）. 当前执行任务碰到 <strong>IO 阻塞</strong>，调度器将此任务挂起，继续下一任务；</p>
+<p>（3）. 多个任务<strong>抢占锁资源</strong>，当前任务没有抢到锁资源，被调度器挂起，继续下一任务；</p>
+<p>（4）. 用户<strong>代码挂起</strong>当前任务，让出 CPU 时间；</p>
+<p>（5）. <strong>硬件中断</strong>；</p>
+</div>
+<div class="section" id="threadlocal">
+<h2>4.1.18 ThreadLocal 作用（线程本地存储）<a class="headerlink" href="#threadlocal" title="Permalink to this headline">¶</a></h2>
+<p>ThreadLocal，很多地方叫做<strong>线程本地变量</strong>，也有些地方叫做<strong>线程本地存储</strong>，ThreadLocal 的作用是提供<strong>线程内的局部变量</strong>， 这种变量在线程的生命周期内起作用 ，<strong>减少同一个线程内多个函数 或者组件之间一些 公共变量的传递的复杂度</strong> 。</p>
+<p>ThreadLocalMap （线程的一个属性）</p>
+<ol class="simple">
+<li>每个线程中都有一个自己的 ThreadLocalMap 类对象，可以将线程自己的对象保持到其中，各管各的，线程可以正确的访问到自己的对象。</li>
+<li>将一个共用的 ThreadLocal 静态实例作为 key，将不同对象的引用保存到不同线程的ThreadLocalMap 中，然后在线程执行的各处通过这个静态 ThreadLocal 实例的 get()方法取得自己线程保存的那个对象，避免了将这个对象作为参数传递的麻烦。</li>
+<li>ThreadLocalMap 其实就是线程里面的一个属性，它在 Thread 类中定义ThreadLocal.ThreadLocalMap threadLocals = null;</li>
+</ol>
+<p><img alt="_images/20210403174021075_1555584900.png" src="_images/20210403174021075_1555584900.png" /></p>
+<p>使用场景:最常见的 ThreadLocal 使用场景为 用来解决 <strong>数据库连接、Session 管理</strong>等。</p>
+</div>
+<div class="section" id="concurrenthashmap-todo">
+<h2>ConcurrentHashMap 并发（todo)<a class="headerlink" href="#concurrenthashmap-todo" title="Permalink to this headline">¶</a></h2>
+<p>java-并发-ConcurrentHashMap高并发机制-jdk1.8：https://blog.csdn.net/jianghuxiaojin/article/details/52006118</p>
+</div>
+<div class="section" id="id5">
+<h2>5.1.4 JAVA 内部类<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p>Java 类中不仅可以定义变量和方法,还可以定义类,这样定义在类内部的类就被称为内部类。根据定义的方式不同,内部类分为<strong>静态内部类,成员内部类,局部内部类,匿名内部类</strong>四种。
+一、静态内部类 （定义在类内部的静态类，就是静态内部类。）</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eg</span> <span class="p">:</span>     
+<span class="n">public</span> <span class="k">class</span> <span class="nc">Out</span> <span class="p">{</span> 
+       <span class="n">private</span> <span class="n">static</span> <span class="nb">int</span> <span class="n">a</span><span class="p">;</span> 
+       <span class="n">private</span> <span class="nb">int</span> <span class="n">b</span><span class="p">;</span> 
+       <span class="n">public</span> <span class="n">static</span> <span class="k">class</span> <span class="nc">Inner</span> <span class="p">{</span> 
+                        <span class="n">public</span> <span class="n">void</span> <span class="nb">print</span><span class="p">()</span> <span class="p">{</span> 
+                               <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> 
+                        <span class="p">}</span> 
+          <span class="p">}</span> 
+<span class="p">}</span> 
+</pre></div>
+</div>
+<ol class="simple">
+<li>静态内部类可以访问外部类所有的静态变量和方法，即使是private的也一样。</li>
+<li>静态内部类和一般类一致，可以定义静态变量、方法，构造方法等。</li>
+<li>其它类使用静态内部类需要使用“外部类.静态内部类”方式，如下所示：Out.Inner inner = new Out.Inner();inner.print();</li>
+<li>Java集合类HashMap内部就有一个静态内部类Entry。Entry是HashMap存放元素的抽象， HashMap 内部维护 Entry 数组用了存放元素，但是 Entry 对使用者是透明的。像这种和外部 类关系密切的，且不依赖外部类实例的，都可以使用静态内部类。</li>
+</ol>
+<p>二、成员内部类 （定义在类内部的非静态类，就是成员内部类。成员内部类不能定义静态方法和变量（final 修饰的 除外）。这是因为成员内部类是非静态的，类初始化的时候先初始化静态成员，如果允许成员内 部类定义静态变量，那么成员内部类的静态变量初始化顺序是有歧义的。）</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eg</span><span class="p">:</span>
+<span class="n">public</span> <span class="k">class</span> <span class="nc">Out</span> <span class="p">{</span>    
+   <span class="n">private</span> <span class="n">static</span> <span class="nb">int</span> <span class="n">a</span><span class="p">;</span>    
+   <span class="n">private</span> <span class="nb">int</span> <span class="n">b</span><span class="p">;</span>    
+   <span class="n">public</span> <span class="k">class</span> <span class="nc">Inner</span> <span class="p">{</span>        
+      <span class="n">public</span> <span class="n">void</span> <span class="nb">print</span><span class="p">()</span> <span class="p">{</span>            
+          <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>            
+          <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>        
+      <span class="p">}</span>    
+   <span class="p">}</span>
+<span class="p">}</span> 
+</pre></div>
+</div>
+<p>三、局部内部类（定义在方法中的类）</p>
+<p>定义在方法中的类，就是局部类。如果一个类只在某个方法中使用，则可以考虑使用局部类。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eg</span><span class="p">:</span>
+<span class="n">public</span> <span class="k">class</span> <span class="nc">Out</span> <span class="p">{</span> 
+    <span class="n">private</span> <span class="n">static</span> <span class="nb">int</span> <span class="n">a</span><span class="p">;</span> 
+    <span class="n">private</span> <span class="nb">int</span> <span class="n">b</span><span class="p">;</span> 
+    <span class="n">public</span> <span class="n">void</span> <span class="n">test</span><span class="p">(</span><span class="n">final</span> <span class="nb">int</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span> 
+        <span class="n">final</span> <span class="nb">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> 
+        <span class="k">class</span> <span class="nc">Inner</span> <span class="p">{</span> 
+            <span class="n">public</span> <span class="n">void</span> <span class="nb">print</span><span class="p">()</span> <span class="p">{</span> 
+                       <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="n">c</span><span class="p">);</span> 
+                <span class="p">}</span> 
+        <span class="p">}</span> 
+    <span class="p">}</span> 
+<span class="p">}</span> 
+</pre></div>
+</div>
+<p>四、匿名内部类（要继承一个父类或者实现一个接口、直接使用 new 来生成一个对象的引用）</p>
+<p>匿名内部类我们必须要继承一个父类或者实现一个接口，当然也仅能只继承一个父类或者实现一 个接口。同时它也是没有class关键字，这是因为匿名内部类是直接使用new来生成一个对象的引用。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">abstract</span> <span class="k">class</span> <span class="nc">Bird</span> <span class="p">{</span> 
+   <span class="n">private</span> <span class="n">String</span> <span class="n">name</span><span class="p">;</span> 
+    <span class="n">public</span> <span class="n">String</span> <span class="n">getName</span><span class="p">()</span> <span class="p">{</span> 
+       <span class="k">return</span> <span class="n">name</span><span class="p">;</span> 
+   <span class="p">}</span> 
+    <span class="n">public</span> <span class="n">void</span> <span class="n">setName</span><span class="p">(</span><span class="n">String</span> <span class="n">name</span><span class="p">)</span> <span class="p">{</span> 
+       <span class="n">this</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span> 
+   <span class="p">}</span> 
+    <span class="n">public</span> <span class="n">abstract</span> <span class="nb">int</span> <span class="n">fly</span><span class="p">();</span> 
+   <span class="p">}</span> 
+   <span class="n">public</span> <span class="k">class</span> <span class="nc">Test</span> <span class="p">{</span> 
+    <span class="n">public</span> <span class="n">void</span> <span class="n">test</span><span class="p">(</span><span class="n">Bird</span> <span class="n">bird</span><span class="p">){</span> 
+       <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="n">bird</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;能够飞 &quot;</span> <span class="o">+</span> <span class="n">bird</span><span class="o">.</span><span class="n">fly</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;米&quot;</span><span class="p">);</span> 
+   <span class="p">}</span> 
+    <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span> 
+       <span class="n">Test</span> <span class="n">test</span> <span class="o">=</span> <span class="n">new</span> <span class="n">Test</span><span class="p">();</span> 
+       <span class="n">test</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">new</span> <span class="n">Bird</span><span class="p">()</span> <span class="p">{</span> 
+            <span class="n">public</span> <span class="nb">int</span> <span class="n">fly</span><span class="p">()</span> <span class="p">{</span> 
+               <span class="k">return</span> <span class="mi">10000</span><span class="p">;</span> 
+           <span class="p">}</span> 
+            <span class="n">public</span> <span class="n">String</span> <span class="n">getName</span><span class="p">()</span> <span class="p">{</span> 
+               <span class="k">return</span> <span class="s2">&quot;大雁&quot;</span><span class="p">;</span> 
+           <span class="p">}</span> 
+       <span class="p">});</span> 
+   <span class="p">}</span> 
+<span class="p">}</span> 
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h2>5.1.5. JAVA 泛型<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p>泛型提供了编译时类型安全检测机制,该机制允许程序员在<strong>编译时检测到非法的类型</strong>。<strong>泛型的本质是参数化类型</strong>,也就是说所操作的数据类型被指定为一个参数。比如我们要写一个排序方法,能够对整型数组、字符串数组甚至其他任何类型的数组进行排序,我们就可以使用 Java 泛型。</p>
+<p>泛型有三种使用方式，分别为：泛型类、泛型接口、泛型方法<br />一、泛型方法<br />你可以写一个泛型方法，该方法在调用时可以接收不同类型的参数。根据传递给泛型方法的参数 类型，编译器适当地处理每一个方法调用。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>1. &lt;? extends T&gt;表示该通配符所代表的类型是T类型的子类。
+
+2. &lt;? super T&gt;表示该通配符所代表的类型是T类型的父类。
+
+
+// 泛型方法 printArray
+
+public static &lt; E &gt; void printArray( E[] inputArray )
+
+{
+
+     for ( E element : inputArray ){
+
+        System.out.printf( &quot;%s &quot;, element );
+
+     }
+
+}
+</pre></div>
+</div>
+<p>二、泛型类<T><br />泛型类的声明和非泛型类的声明类似，除了在类名后面添加了类型参数声明部分。和泛型方法一 样，泛型类的类型参数声明部分也包含一个或多个类型参数，参数间用逗号隔开。一个泛型参数， 也被称为一个类型变量，是用于指定一个泛型类型名称的标识符。因为他们接受一个或多个参数， 这些类被称为参数化的类或参数化的类型。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">Box</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+
+  <span class="n">private</span> <span class="n">T</span> <span class="n">t</span><span class="p">;</span>
+
+  <span class="n">public</span> <span class="n">void</span> <span class="n">add</span><span class="p">(</span><span class="n">T</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="n">this</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+
+  <span class="p">}</span>
+
+  <span class="n">public</span> <span class="n">T</span> <span class="n">get</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="k">return</span> <span class="n">t</span><span class="p">;</span>
+
+  <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>三、泛型接口<br />泛型接口与泛型类的定义及使用基本相同。泛型接口常被用在各种类的生产器中</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">interface</span> <span class="n">Generator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+
+    <span class="n">public</span> <span class="n">T</span> <span class="nb">next</span><span class="p">();</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>四、类型通配符<br />类型通配符一般是使用？代替具体的类型实参，注意了，此处’？’是类型实参，而不是类型形参 。<br />再直白点的意思就是，此处的？和Number、String、Integer一样都是一种实际的类型，可以把？看成所有类型的父类。是一种真实的类型。<br />可以解决当具体类型不确定的时候，这个通配符就是 ?  ；当操作类型时，不需要使用类型的具体功能时，只使用Object类中的功能。那么可以用 ? 通配符来表未知类型。<br />五、泛型擦除<br />Java 中的泛型基本上都是在编译器这个层次来实现的。在生成的 Java 字节代码中是不包含泛 型中的类型信息的。<br />使用泛型的时候加上的类型参数，会被编译器在编译的时候去掉。这个 过程就称为类型擦除。<br />如在代码中定义的 List<Object>和 List<String>等类型，在编译之后 都会变成List。JVM看到的只是List，而由泛型附加的类型信息对JVM来说是不可见的。 类型擦除的基本过程也比较简单，首先是找到用来替换类型参数的具体类。这个具体类一般 是 Object。如果指定了类型参数的上界的话，则使用这个上界。把代码中的类型参数都替换 成具体的类。<br />例：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public static void main(String[] args) {
+
+    List&lt;String&gt; ls = new ArrayList&lt;String&gt;();
+
+    List&lt;Integer&gt; li = new ArrayList&lt;Integer&gt;();
+
+    System.out.println(ls.getClass() == li.getClass());
+
+}
+
+//结果：true
+</pre></div>
+</div>
+</div>
+<div class="section" id="java-java">
+<h2>5.1.6. JAVA 序列化(创建可复用的 Java 对象)<a class="headerlink" href="#java-java" title="Permalink to this headline">¶</a></h2>
+<p>1、如果一个类想被序列化，需要实现Serializable接口。否则将抛出NotSerializableException异常，这是因为，在序列化操作过程中会对类型进行检查，要求被序列化的类必须属于Enum、Array和Serializable类型其中的任何一种。<br />2、通过ObjectOutputStream和ObjectInputStream对对象进行序列化及反序列化<br />3、虚拟机是否允许反序列化，不仅取决于类路径和功能代码是否一致，一个非常重要的一点是两个类的序列化 ID 是否一致（就是 private static final long serialVersionUID）<br />序列化 ID 在 Eclipse 下提供了两种生成策略，一个是固定的 1L，一个是随机生成一个不重复的 long 类型数据（实际上是使用 JDK 工具生成），在这里有一个建议，如果没有特殊需求，就是用默认的 1L 就可以，这样可以确保代码一致时反序列化成功。那么随机生成的序列化 ID 有什么作用呢，有些时候，通过改变序列化 ID 可以用来限制某些用户的使用。<br />4、序列化并不保存静态变量。<br />5、要想将父类对象也序列化，就需要让父类也实现Serializable 接口。<br />6、Transient 关键字的作用是控制变量的序列化，在变量声明前加上该关键字，可以阻止该变量被序列化到文件中，在被反序列化后，transient 变量的值被设为初始值，如 int 型的是 0，对象型的是 null。<br />7、服务器端给客户端发送序列化对象数据，对象中有一些数据是敏感的，比如密码字符串等，希望对该密码字段在序列化时，进行加密，而客户端如果拥有解密的密钥，只有在客户端进行反序列化时，才可以对密码进行读取，这样可以一定程度保证序列化对象的数据安全。<br />8、在类中增加writeObject 和 readObject 方法可以实现自定义序列化策略</p>
+</div>
+<div class="section" id="id7">
+<h2>参考<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p>Executors创建的4种线程池的使用：https://my.oschina.net/sdlvzg/blog/2222136<br />Java面试复习总结19——序列化和反序列化:https://blog.csdn.net/qq_38905818/article/details/103493119#t8<br />Java线程池(围绕ThreadPoolExecutor讲解工作流程、常见参数、调优、监控）:https://blog.csdn.net/u014454538/article/details/96910729</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="java_读书03Java基础高频面试题(2021年最新版).html" class="btn btn-neutral float-right" title="java_读书03Java基础高频面试题(2021年最新版)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="java_读书01guide学习笔记.html" class="btn btn-neutral float-left" title="java_读书01guide学习笔记" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, yuanjh
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
