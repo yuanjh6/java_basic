@@ -1,4 +1,6 @@
 # java_并发编程06从ReentrantLock到AQS
+java锁
+
 ## 从ReentrantLock到AQS
 关于ReentrantLock不做过多解释，参考上一篇《从锁到ReentrantLock》，简单来说先有Volatile和Synchronized，后来在有了更为灵活的Lock接口，ReentrantLock作为Lock接口的一种实现方式。而**ReentrantLock底层便是基于AQS**。
 

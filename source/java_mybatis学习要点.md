@@ -1,7 +1,4 @@
 # java_mybatis学习要点
-
-## MyBatis是什么？和hibernate的区别
-
 MyBatis 是一个小巧、方便、高效、简单、直接、半自动化的持久层框架，Hibernate 是一个强大、方便、高效、复杂、间接、全自动化的持久层框架。
 
 
